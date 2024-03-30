@@ -1,0 +1,7 @@
+version: '3'
+
+tasks:
+  test:
+    desc: run the test
+    cmds:
+    - go test -v -cover ./...
