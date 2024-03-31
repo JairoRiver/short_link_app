@@ -1,5 +1,7 @@
 package model
 
+type RecycleLinkId int
+
 type RecycleLink struct {
-	SKey int `json:"s_key"`
+	SKey RecycleLinkId `json:"s_key"`
 }
