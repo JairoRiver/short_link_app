@@ -6,14 +6,18 @@ import (
 	"github.com/google/uuid"
 )
 
+type CustomLinkId int
+type SuggestionId int
+type CustomLinkToken string
+
 type CustomLink struct {
-	Id           int       `json:"id"`
-	UserId       uuid.UUID `json:"user_id"`
-	Url          string    `json:"url"`
-	Token        string    `json:"token"`
-	IsSuggestion bool      `json:"is_suggestion"`
-	SuggestionId int       `json:"suggestion_id"`
-	Deleted      bool      `json:"deleted"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	Id           CustomLinkId    `json:"id"`
+	UserId       uuid.UUID       `json:"user_id"`
+	Url          string          `json:"url"`
+	Token        CustomLinkToken `json:"token"`
+	IsSuggestion bool            `json:"is_suggestion"`
+	SuggestionId SuggestionId    `json:"suggestion_id"`
+	Deleted      bool            `json:"deleted"`
+	CreatedAt    time.Time       `json:"created_at"`
+	UpdatedAt    time.Time       `json:"updated_at"`
 }

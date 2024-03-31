@@ -14,14 +14,15 @@ import (
 
 const (
 	shortLinkLenMin = 1
-	shortLinkLenMax = 1000
+	shortLinkLenMax = 10000
 	linkURLLen      = 20
 	linkTokenLen    = 6
-	sKeyLenMin      = 1001
-	sKeyLenMax      = 10000
+	sKeyLenMin      = 10001
+	sKeyLenMax      = 100000
 	listTestLen     = 20
 )
 
+// createRandomShortLink create short link for test propouses
 func createRandomShortLink(t *testing.T, repo *Repository) model.ShortLink {
 	shortLink := model.ShortLink{
 		Id:        model.ShortLinkId(util.RandomInt(shortLinkLenMin, shortLinkLenMax)),
@@ -145,4 +146,9 @@ func TestDeleteShortLink(t *testing.T) {
 	assert.Zero(t, deletedLink.SKey)
 	assert.True(t, deletedLink.Deleted)
 	assert.Greater(t, deletedLink.UpdatedAt, deletedLink.CreatedAt)
+
+	deletedLinkSk, err := repo.GetShortLinkBySKey(context.Background(), shortLink.SKey)
+	assert.Error(t, err)
+	assert.Equal(t, err, repository.ErrNotFound)
+	assert.Nil(t, deletedLinkSk)
 }

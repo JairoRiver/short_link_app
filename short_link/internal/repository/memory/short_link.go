@@ -96,6 +96,7 @@ func (r *Repository) DeleteShortLink(ctx context.Context, shotLinkID model.Short
 		Token:     "",
 		SKey:      0,
 		Deleted:   true,
+		CreatedAt: r.shortLinkData[shotLinkID].CreatedAt,
 		UpdatedAt: time.Now(),
 	}
 
