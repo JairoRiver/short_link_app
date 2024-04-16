@@ -8,6 +8,8 @@ type Repository struct {
 	customLinkData      map[model.CustomLinkId]model.CustomLink
 	customLinkTokenData map[model.CustomLinkToken]model.CustomLink
 	recycleLinkData     map[model.RecycleLinkId]model.RecycleLink
+	//aux map
+	lastIds map[string]int
 }
 
 // New creates a new memory Repository.
@@ -17,5 +19,6 @@ func New() *Repository {
 		customLinkData:      map[model.CustomLinkId]model.CustomLink{},
 		customLinkTokenData: map[model.CustomLinkToken]model.CustomLink{},
 		recycleLinkData:     map[model.RecycleLinkId]model.RecycleLink{},
+		lastIds:             map[string]int{"shortLink": 0, "customLink": 0},
 	}
 }

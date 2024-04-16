@@ -9,6 +9,7 @@ import (
 	"github.com/JairoRiver/short_link_app/short_link/internal/util"
 	"github.com/JairoRiver/short_link_app/short_link/pkg/model"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,9 +25,8 @@ const (
 
 // createRandomShortLink create short link for test propouses
 func createRandomShortLink(t *testing.T, repo *Repository) model.ShortLink {
-	shortLink := model.ShortLink{
-		Id:        model.ShortLinkId(util.RandomInt(shortLinkLenMin, shortLinkLenMax)),
-		UserId:    uuid.New(),
+	shortLink := repository.CreateShortLinkParams{
+		UserId:    repository.HasUserID{ID: uuid.New(), Valid: true},
 		Url:       util.RandomURL(linkURLLen),
 		Token:     util.RandomString(linkTokenLen),
 		SKey:      model.ShortLinkId(util.RandomInt(sKeyLenMin, sKeyLenMax)),
@@ -35,11 +35,11 @@ func createRandomShortLink(t *testing.T, repo *Repository) model.ShortLink {
 		UpdatedAt: time.Now(),
 	}
 
-	newShortLink := repo.PutShortLink(context.Background(), shortLink)
+	newShortLink, err := repo.PutShortLink(context.Background(), shortLink)
 
-	assert.NoError(t, newShortLink)
+	assert.NoError(t, err)
 
-	return shortLink
+	return newShortLink
 }
 
 func TestPutShortLink(t *testing.T) {
@@ -57,7 +57,7 @@ func TestGetShortLinkByID(t *testing.T) {
 	getShortLinkError, err := repo.GetShortLinkByID(context.Background(), model.ShortLinkId(util.RandomInt(shortLinkLenMax+1, shortLinkLenMax+50)))
 	assert.Nil(t, getShortLinkError)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 
 	// Test get link
 	getShortLink, err := repo.GetShortLinkByID(context.Background(), shortLink.Id)
@@ -74,7 +74,7 @@ func TestGetShortLinkBySKey(t *testing.T) {
 	getShortLinkError, err := repo.GetShortLinkBySKey(context.Background(), model.ShortLinkId(util.RandomInt(sKeyLenMax+1, sKeyLenMax+50)))
 	assert.Nil(t, getShortLinkError)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 
 	// Test get link
 	getShortLink, err := repo.GetShortLinkBySKey(context.Background(), shortLink.SKey)
@@ -135,7 +135,7 @@ func TestDeleteShortLink(t *testing.T) {
 	errorLink, err := repo.DeleteShortLink(context.Background(), model.ShortLinkId(util.RandomInt(shortLinkLenMax+1, shortLinkLenMax+50)))
 	assert.Nil(t, errorLink)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 
 	// Test logical delete
 	deletedLink, err := repo.DeleteShortLink(context.Background(), shortLink.Id)
@@ -149,6 +149,6 @@ func TestDeleteShortLink(t *testing.T) {
 
 	deletedLinkSk, err := repo.GetShortLinkBySKey(context.Background(), shortLink.SKey)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 	assert.Nil(t, deletedLinkSk)
 }

@@ -2,6 +2,7 @@ package memory
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/JairoRiver/short_link_app/short_link/internal/repository"
@@ -10,22 +11,38 @@ import (
 )
 
 // PutCustomLink adds a new link .
-func (r *Repository) PutCustomLink(ctx context.Context, customLink model.CustomLink) error {
-	if _, ok := r.customLinkData[customLink.Id]; !ok {
-		r.customLinkData[customLink.Id] = customLink
+func (r *Repository) PutCustomLink(ctx context.Context, customLinkParams repository.CreateCustomLinkParams) (model.CustomLink, error) {
+
+	customLink := model.CustomLink{
+		Id:           model.CustomLinkId(r.lastIds["customLink"] + 1),
+		Url:          customLinkParams.Url,
+		Token:        customLinkParams.Token,
+		IsSuggestion: customLinkParams.IsSuggestion,
+		SuggestionId: customLinkParams.SuggestionId,
+		Deleted:      customLinkParams.Deleted,
+		CreatedAt:    customLinkParams.CreatedAt,
+		UpdatedAt:    customLinkParams.UpdatedAt,
 	}
+
+	r.lastIds["customLink"] = r.lastIds["customLink"] + 1
+
+	if customLinkParams.UserId.Valid {
+		customLink.UserId = customLinkParams.UserId.ID
+	}
+
+	r.customLinkData[customLink.Id] = customLink
 
 	if _, ok := r.customLinkTokenData[customLink.Token]; !ok {
 		r.customLinkTokenData[customLink.Token] = customLink
 	}
 
-	return nil
+	return customLink, nil
 }
 
 // GetCustomLinkByID retrieves a custom link by Id.
 func (r *Repository) GetCustomLinkByID(ctx context.Context, customLinkID model.CustomLinkId) (*model.CustomLink, error) {
 	if _, ok := r.customLinkData[customLinkID]; !ok {
-		return nil, repository.ErrNotFound
+		return nil, fmt.Errorf("Repository memory GetCustomLinkByID method error: %w", repository.ErrNotFound)
 	}
 
 	customLinkValue := r.customLinkData[customLinkID]
@@ -36,7 +53,7 @@ func (r *Repository) GetCustomLinkByID(ctx context.Context, customLinkID model.C
 // GetCustomLinkByToken retrieves a custom link by token.
 func (r *Repository) GetCustomLinkByToken(ctx context.Context, customLinkToken model.CustomLinkToken) (*model.CustomLink, error) {
 	if _, ok := r.customLinkTokenData[customLinkToken]; !ok {
-		return nil, repository.ErrNotFound
+		return nil, fmt.Errorf("Repository memory GetCustomLinkByToken method error: %w", repository.ErrNotFound)
 	}
 
 	customLinkValue := r.customLinkTokenData[customLinkToken]
@@ -84,7 +101,7 @@ func (r *Repository) ListCustomLinkByUser(ctx context.Context, userId uuid.UUID)
 // DeleteCustomLink logic delete for a custom link.
 func (r *Repository) DeleteCustomLink(ctx context.Context, customLinkID model.CustomLinkId) (*model.CustomLink, error) {
 	if _, ok := r.customLinkData[customLinkID]; !ok {
-		return nil, repository.ErrNotFound
+		return nil, fmt.Errorf("Repository memory DeleteCustomLink method error: %w", repository.ErrNotFound)
 	}
 
 	token := r.customLinkData[customLinkID].Token

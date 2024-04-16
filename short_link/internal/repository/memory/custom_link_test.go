@@ -9,6 +9,7 @@ import (
 	"github.com/JairoRiver/short_link_app/short_link/internal/util"
 	"github.com/JairoRiver/short_link_app/short_link/pkg/model"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,9 +21,8 @@ const (
 
 // createRandomCustomLink create a random custom link for test propouses
 func createRandomCustomLink(t *testing.T, repo *Repository) model.CustomLink {
-	customLink := model.CustomLink{
-		Id:           model.CustomLinkId(util.RandomInt(customLinkLenMin, customLinkLenMax)),
-		UserId:       uuid.New(),
+	customLink := repository.CreateCustomLinkParams{
+		UserId:       repository.HasUserID{ID: uuid.New(), Valid: true},
 		Url:          util.RandomURL(linkURLLen),
 		Token:        model.CustomLinkToken(util.RandomString(linkCustomTokenLen)),
 		IsSuggestion: false,
@@ -32,11 +32,11 @@ func createRandomCustomLink(t *testing.T, repo *Repository) model.CustomLink {
 		UpdatedAt:    time.Now(),
 	}
 
-	newCustomLink := repo.PutCustomLink(context.Background(), customLink)
+	newCustomLink, err := repo.PutCustomLink(context.Background(), customLink)
 
-	assert.NoError(t, newCustomLink)
+	assert.NoError(t, err)
 
-	return customLink
+	return newCustomLink
 }
 
 func TestPutCustomLink(t *testing.T) {
@@ -54,7 +54,7 @@ func TestGetCustomLinkByID(t *testing.T) {
 	getCustomLinkError, err := repo.GetCustomLinkByID(context.Background(), model.CustomLinkId(util.RandomInt(customLinkLenMax+1, customLinkLenMax+50)))
 	assert.Nil(t, getCustomLinkError)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 
 	// Test get link
 	getCustomLink, err := repo.GetCustomLinkByID(context.Background(), customLink.Id)
@@ -71,7 +71,7 @@ func TestGetCustomLinkByToken(t *testing.T) {
 	getCustomLinkError, err := repo.GetCustomLinkByToken(context.Background(), model.CustomLinkToken(util.RandomString(linkCustomTokenLen)))
 	assert.Nil(t, getCustomLinkError)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 
 	// Test get link
 	getCustomLink, err := repo.GetCustomLinkByToken(context.Background(), customLink.Token)
@@ -131,7 +131,7 @@ func TestDeleteCustomLink(t *testing.T) {
 	errorLink, err := repo.DeleteCustomLink(context.Background(), model.CustomLinkId(util.RandomInt(customLinkLenMax+1, customLinkLenMax+50)))
 	assert.Nil(t, errorLink)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 
 	// Test logical delete
 	deletedLink, err := repo.DeleteCustomLink(context.Background(), customLink.Id)
@@ -144,6 +144,6 @@ func TestDeleteCustomLink(t *testing.T) {
 
 	deletedLinkToken, err := repo.GetCustomLinkByToken(context.Background(), customLink.Token)
 	assert.Error(t, err)
-	assert.Equal(t, err, repository.ErrNotFound)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
 	assert.Nil(t, deletedLinkToken)
 }

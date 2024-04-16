@@ -2,6 +2,7 @@ package memory
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/JairoRiver/short_link_app/short_link/internal/repository"
@@ -10,22 +11,35 @@ import (
 )
 
 // PutShortLink adds a new link .
-func (r *Repository) PutShortLink(ctx context.Context, shotLink model.ShortLink) error {
-	if _, ok := r.shortLinkData[shotLink.Id]; !ok {
-		r.shortLinkData[shotLink.Id] = shotLink
+func (r *Repository) PutShortLink(ctx context.Context, shotLinkParams repository.CreateShortLinkParams) (model.ShortLink, error) {
+
+	shortLink := model.ShortLink{
+		Id:        model.ShortLinkId(r.lastIds["shortLink"] + 1),
+		Url:       shotLinkParams.Url,
+		Token:     shotLinkParams.Token,
+		SKey:      shotLinkParams.SKey,
+		Deleted:   shotLinkParams.Deleted,
+		CreatedAt: shotLinkParams.CreatedAt,
+		UpdatedAt: shotLinkParams.UpdatedAt,
 	}
 
-	if _, ok := r.shortLinkData[shotLink.SKey]; !ok {
-		r.shortLinkData[shotLink.SKey] = shotLink
+	r.lastIds["shortLink"] = r.lastIds["shortLink"] + 1
+
+	if shotLinkParams.UserId.Valid {
+		shortLink.UserId = shotLinkParams.UserId.ID
 	}
 
-	return nil
+	r.shortLinkData[shortLink.Id] = shortLink
+
+	r.shortLinkData[shortLink.SKey] = shortLink
+
+	return shortLink, nil
 }
 
 // GetShortLinkByID retrieves a shot link by Id.
 func (r *Repository) GetShortLinkByID(ctx context.Context, shotLinkID model.ShortLinkId) (*model.ShortLink, error) {
 	if _, ok := r.shortLinkData[shotLinkID]; !ok {
-		return nil, repository.ErrNotFound
+		return nil, fmt.Errorf("Repository memory GetShortLinkByID method error: %w", repository.ErrNotFound)
 	}
 
 	shortLinkValue := r.shortLinkData[shotLinkID]
@@ -36,7 +50,7 @@ func (r *Repository) GetShortLinkByID(ctx context.Context, shotLinkID model.Shor
 // GetShortLinkBySKey retrieves a shot link by S_key.
 func (r *Repository) GetShortLinkBySKey(ctx context.Context, sKeyID model.ShortLinkId) (*model.ShortLink, error) {
 	if _, ok := r.shortLinkData[sKeyID]; !ok {
-		return nil, repository.ErrNotFound
+		return nil, fmt.Errorf("Repository memory GetShortLinkBySKey method error: %w", repository.ErrNotFound)
 	}
 
 	shortLinkValue := r.shortLinkData[sKeyID]
@@ -84,7 +98,7 @@ func (r *Repository) ListShortLinkByUser(ctx context.Context, userId uuid.UUID) 
 // DeleteShortLink logic delete for a short link.
 func (r *Repository) DeleteShortLink(ctx context.Context, shotLinkID model.ShortLinkId) (*model.ShortLink, error) {
 	if _, ok := r.shortLinkData[shotLinkID]; !ok {
-		return nil, repository.ErrNotFound
+		return nil, fmt.Errorf("Repository memory DeleteShortLink method error: %w", repository.ErrNotFound)
 	}
 
 	sKey := r.shortLinkData[shotLinkID].SKey
