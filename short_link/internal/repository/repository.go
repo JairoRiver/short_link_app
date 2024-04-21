@@ -29,6 +29,8 @@ type Storer interface {
 	ListActiveShortLink(ctx context.Context) ([]model.ShortLink, error)
 	ListShortLinkByUser(ctx context.Context, userId uuid.UUID) ([]model.ShortLink, error)
 	DeleteShortLink(ctx context.Context, shotLinkID model.ShortLinkId) (*model.ShortLink, error)
+	// Aux S Key Data
+	GetAuxSKey(ctx context.Context) (*model.AuxSKey, error)
 }
 
 type HasUserID struct {
@@ -57,4 +59,15 @@ type CreateCustomLinkParams struct {
 	Deleted      bool
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+}
+
+// Update AuxSKeyParams is the argument to UpdateSKey Method
+type IsIntValid struct {
+	Value uint
+	Valid bool
+}
+
+type AuxSKeyParams struct {
+	N0 IsIntValid
+	A0 IsIntValid
 }
