@@ -37,16 +37,17 @@ func TestPutRecycleLink(t *testing.T) {
 
 func TestGetRecycleLink(t *testing.T) {
 	repo := New()
-	recycleLink := createRandomRecycleLink(t, repo)
 
 	// Test not found error
-	getRecycleLinkError, err := repo.GetRecycleLink(context.Background(), model.RecycleLinkId(util.RandomInt(recycleLinkLenMax+1, recycleLinkLenMax+50)))
+	getRecycleLinkError, err := repo.GetRecycleLink(context.Background())
 	assert.Nil(t, getRecycleLinkError)
 	assert.Error(t, err)
 	assert.Equal(t, err, repository.ErrNotFound)
 
 	// Test get link
-	getRecycleLink, err := repo.GetRecycleLink(context.Background(), recycleLink.SKey)
+	recycleLink := createRandomRecycleLink(t, repo)
+
+	getRecycleLink, err := repo.GetRecycleLink(context.Background())
 	assert.NotNil(t, getRecycleLink)
 	assert.Equal(t, *getRecycleLink, recycleLink)
 	assert.NoError(t, err)
@@ -65,7 +66,7 @@ func TestDeleteRecycleLink(t *testing.T) {
 	err = repo.DeleteRecycleLink(context.Background(), recycleLink.SKey)
 	assert.NoError(t, err)
 
-	deletedLink, err := repo.GetRecycleLink(context.Background(), recycleLink.SKey)
+	deletedLink, err := repo.GetRecycleLink(context.Background())
 	assert.Error(t, err)
 	assert.Equal(t, err, repository.ErrNotFound)
 	assert.Nil(t, deletedLink)

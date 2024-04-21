@@ -7,33 +7,49 @@ import (
 	"github.com/JairoRiver/short_link_app/short_link/pkg/model"
 )
 
+// Aux func to find the position of a recycle key
+func (r *Repository) recycleKeyIndex(value model.RecycleLinkId) int {
+	for i, v := range r.recycleLinkData {
+		if v.SKey == value {
+			return i
+		}
+	}
+	return -1
+}
+
+// Aux func to delete element of recycle link slice from one index
+func (r *Repository) deleteElementRecycleLink(index int) []model.RecycleLink {
+	newSlice := append(r.recycleLinkData[:index], r.recycleLinkData[index+1:]...)
+	return newSlice
+}
+
 // PutRecycleLink adds a new recycle link.
 func (r *Repository) PutRecycleLink(ctx context.Context, recycleLink model.RecycleLink) error {
-	if _, ok := r.recycleLinkData[recycleLink.SKey]; !ok {
-		r.recycleLinkData[recycleLink.SKey] = recycleLink
-	}
+	r.recycleLinkData = append(r.recycleLinkData, recycleLink)
 
 	return nil
 }
 
 // GetRecycleLink retrieves a recycle link by SKey.
-func (r *Repository) GetRecycleLink(ctx context.Context, recycleLinkID model.RecycleLinkId) (*model.RecycleLink, error) {
-	if _, ok := r.recycleLinkData[recycleLinkID]; !ok {
+func (r *Repository) GetRecycleLink(ctx context.Context) (*model.RecycleLink, error) {
+	if len(r.recycleLinkData) == 0 {
 		return nil, repository.ErrNotFound
 	}
 
-	recycleLinkValue := r.recycleLinkData[recycleLinkID]
+	recycleLinkValue := r.recycleLinkData[0]
 
 	return &recycleLinkValue, nil
 }
 
 // DeleteRecycleLink delete a recycle link.
 func (r *Repository) DeleteRecycleLink(ctx context.Context, recycleLinkID model.RecycleLinkId) error {
-	if _, ok := r.recycleLinkData[recycleLinkID]; !ok {
+	recycleLinkIndex := r.recycleKeyIndex(recycleLinkID)
+	if recycleLinkIndex == -1 {
 		return repository.ErrNotFound
 	}
 
-	delete(r.recycleLinkData, recycleLinkID)
+	newRecycleLinkSlice := r.deleteElementRecycleLink(recycleLinkIndex)
+	r.recycleLinkData = newRecycleLinkSlice
 
 	return nil
 }

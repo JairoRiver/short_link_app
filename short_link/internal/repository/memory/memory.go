@@ -7,7 +7,7 @@ type Repository struct {
 	shortLinkData       map[model.ShortLinkId]model.ShortLink
 	customLinkData      map[model.CustomLinkId]model.CustomLink
 	customLinkTokenData map[model.CustomLinkToken]model.CustomLink
-	recycleLinkData     map[model.RecycleLinkId]model.RecycleLink
+	recycleLinkData     []model.RecycleLink
 	auxSKey             model.AuxSKey
 	//aux map
 	lastIds map[string]int
@@ -19,7 +19,6 @@ func New() *Repository {
 		shortLinkData:       map[model.ShortLinkId]model.ShortLink{},
 		customLinkData:      map[model.CustomLinkId]model.CustomLink{},
 		customLinkTokenData: map[model.CustomLinkToken]model.CustomLink{},
-		recycleLinkData:     map[model.RecycleLinkId]model.RecycleLink{},
 		lastIds:             map[string]int{"shortLink": 0, "customLink": 0},
 		auxSKey:             model.AuxSKey{N: 60, Init: 931151403, End: 56800235583, Step: 931151403, A0: 0, N0: 1},
 	}
