@@ -21,3 +21,21 @@ func (c *Controller) CheckCustomLinkIsFree(ctx context.Context, token string) (b
 
 	return false, nil
 }
+
+type GetLinkResponse struct {
+	url string
+}
+
+func (c *Controller) GetByCustomToken(ctx context.Context, token string) (*GetLinkResponse, error) {
+	if len(token) > 6 {
+		customLink, err := c.repo.GetCustomLinkByToken(ctx, model.CustomLinkToken(token))
+		if err != nil {
+			return nil, fmt.Errorf("Controller GetByCustomToken GetCustomLinkByToken error: %w", err)
+		}
+		rps := GetLinkResponse{
+			url: customLink.Url,
+		}
+		return &rps, nil
+	}
+	return nil, fmt.Errorf("Controller GetByCustomToken token len <= 6 error: %w", ErrInvalidCustomToken)
+}
