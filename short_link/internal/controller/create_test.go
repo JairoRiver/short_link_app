@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"math/big"
 	"testing"
 
@@ -43,4 +44,30 @@ func TestCreateShortLink(t *testing.T) {
 	assert.NotNil(t, otherShortLink)
 	assert.Equal(t, otherShortLink.url, url)
 	assert.Equal(t, otherShortLink.token, big.NewInt(testSK).Text(62))
+}
+
+func TestCreateCustomLink(t *testing.T) {
+	repo := memory.New()
+	control := New(repo)
+
+	//test invalid token len
+	url := util.RandomURL(11)
+	user := repository.HasUserID{}
+	errToken := util.RandomString(6)
+	customToken, err := control.CreateCustomLink(context.Background(), url, user, errToken)
+
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, ErrInvalidCustomToken))
+	assert.Nil(t, customToken)
+
+	//test valid token len
+	url_2 := util.RandomURL(11)
+	user_2 := repository.HasUserID{}
+	token := util.RandomString(10)
+	customToken_2, err := control.CreateCustomLink(context.Background(), url_2, user_2, token)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, customToken_2)
+	assert.Equal(t, customToken_2.token, token)
+	assert.Equal(t, customToken_2.url, url_2)
 }

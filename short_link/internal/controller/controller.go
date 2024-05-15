@@ -1,6 +1,10 @@
 package controller
 
-import "github.com/JairoRiver/short_link_app/short_link/internal/repository"
+import (
+	"errors"
+
+	"github.com/JairoRiver/short_link_app/short_link/internal/repository"
+)
 
 // Controller defines a short link service controller.
 type Controller struct {
@@ -11,3 +15,5 @@ type Controller struct {
 func New(repo repository.Storer) *Controller {
 	return &Controller{repo}
 }
+
+var ErrInvalidCustomToken = errors.New("error invalid custom token")

@@ -62,7 +62,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 	token := big.NewInt(s_key).Text(62)
 
 	//Create short link
-	customLinkParams := repository.CreateShortLinkParams{
+	shortLinkParams := repository.CreateShortLinkParams{
 		UserId:    userId,
 		Url:       url,
 		Token:     token,
@@ -71,7 +71,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
-	shortLink, err := c.repo.PutShortLink(ctx, customLinkParams)
+	shortLink, err := c.repo.PutShortLink(ctx, shortLinkParams)
 	if err != nil {
 		return nil, fmt.Errorf("Controller CreateShortLink PutShortLink error: %w", err)
 	}
@@ -81,4 +81,30 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 		token: shortLink.Token,
 	}
 	return &shortLinkRsp, nil
+}
+
+func (c *Controller) CreateCustomLink(ctx context.Context, url string, userId repository.HasUserID, token string) (*ShortLinkResponse, error) {
+	// custom token len must be longer than 6
+	if len(token) <= 6 {
+		return nil, fmt.Errorf("Controller CreateCustomLink len token <= 6 error: %w", ErrInvalidCustomToken)
+	}
+
+	customLinkParams := repository.CreateCustomLinkParams{
+		UserId:    userId,
+		Url:       url,
+		Token:     model.CustomLinkToken(token),
+		Deleted:   false,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+	customLink, err := c.repo.PutCustomLink(ctx, customLinkParams)
+	if err != nil {
+		return nil, fmt.Errorf("Controller CreateCustomLink PutCustomLink error: %w", err)
+	}
+
+	customLinkRsp := ShortLinkResponse{
+		url:   customLink.Url,
+		token: string(customLink.Token),
+	}
+	return &customLinkRsp, nil
 }
