@@ -8,8 +8,8 @@ import (
 )
 
 // Aux func to find the position of a recycle key
-func (r *Repository) recycleKeyIndex(value model.RecycleLinkId) int {
-	for i, v := range r.recycleLinkData {
+func recycleKeyIndex(value model.RecycleLinkId, data []model.RecycleLink) int {
+	for i, v := range data {
 		if v.SKey == value {
 			return i
 		}
@@ -18,8 +18,8 @@ func (r *Repository) recycleKeyIndex(value model.RecycleLinkId) int {
 }
 
 // Aux func to delete element of recycle link slice from one index
-func (r *Repository) deleteElementRecycleLink(index int) []model.RecycleLink {
-	newSlice := append(r.recycleLinkData[:index], r.recycleLinkData[index+1:]...)
+func deleteElementRecycleLink(index int, data []model.RecycleLink) []model.RecycleLink {
+	newSlice := append(data[:index], data[index+1:]...)
 	return newSlice
 }
 
@@ -43,12 +43,12 @@ func (r *Repository) GetRecycleLink(ctx context.Context) (*model.RecycleLink, er
 
 // DeleteRecycleLink delete a recycle link.
 func (r *Repository) DeleteRecycleLink(ctx context.Context, recycleLinkID model.RecycleLinkId) error {
-	recycleLinkIndex := r.recycleKeyIndex(recycleLinkID)
+	recycleLinkIndex := recycleKeyIndex(recycleLinkID, r.recycleLinkData)
 	if recycleLinkIndex == -1 {
 		return repository.ErrNotFound
 	}
 
-	newRecycleLinkSlice := r.deleteElementRecycleLink(recycleLinkIndex)
+	newRecycleLinkSlice := deleteElementRecycleLink(recycleLinkIndex, r.recycleLinkData)
 	r.recycleLinkData = newRecycleLinkSlice
 
 	return nil

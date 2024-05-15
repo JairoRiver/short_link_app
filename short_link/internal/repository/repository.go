@@ -10,7 +10,7 @@ import (
 
 type Storer interface {
 	//Custom Link
-	PutCustomLink(ctx context.Context, customLink model.CustomLink) error
+	PutCustomLink(ctx context.Context, customLinkParams CreateCustomLinkParams) (model.CustomLink, error)
 	GetCustomLinkByID(ctx context.Context, customLinkID model.CustomLinkId) (*model.CustomLink, error)
 	GetCustomLinkByToken(ctx context.Context, customLinkToken model.CustomLinkToken) (*model.CustomLink, error)
 	ListAllCustomLink(ctx context.Context) ([]model.CustomLink, error)
@@ -19,7 +19,7 @@ type Storer interface {
 	DeleteCustomLink(ctx context.Context, customLinkID model.CustomLinkId) (*model.CustomLink, error)
 	// Recycle Link
 	PutRecycleLink(ctx context.Context, recycleLink model.RecycleLink) error
-	GetRecycleLink(ctx context.Context, recycleLinkID model.RecycleLinkId) (*model.RecycleLink, error)
+	GetRecycleLink(ctx context.Context) (*model.RecycleLink, error)
 	DeleteRecycleLink(ctx context.Context, recycleLinkID model.RecycleLinkId) error
 	// Short Link
 	PutShortLink(ctx context.Context, shotLinkParams CreateShortLinkParams) (model.ShortLink, error)
@@ -31,6 +31,7 @@ type Storer interface {
 	DeleteShortLink(ctx context.Context, shotLinkID model.ShortLinkId) (*model.ShortLink, error)
 	// Aux S Key Data
 	GetAuxSKey(ctx context.Context) (*model.AuxSKey, error)
+	UpdateAuxSKey(ctx context.Context, params AuxSKeyParams) (*model.AuxSKey, error)
 }
 
 type HasUserID struct {
