@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-const alphabet = "abcdefghijklmnopqrstuvwxyz-_"
+const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKL"
 
 // RandomInt generate a random interger between min and max
 func RandomInt(min, max int64) int64 {

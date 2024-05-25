@@ -124,3 +124,30 @@ func (r *Repository) DeleteCustomLink(ctx context.Context, customLinkID model.Cu
 
 	return &newCustomLink, nil
 }
+
+// DeleteCustomLinkByToken ogic delete for a custom link by token.
+func (r *Repository) DeleteCustomLinkByToken(ctx context.Context, customLinkToken model.CustomLinkToken) (*model.CustomLink, error) {
+	if _, ok := r.customLinkTokenData[customLinkToken]; !ok {
+		return nil, fmt.Errorf("Repository memory DeleteCustomLinkByToken method error: %w", repository.ErrNotFound)
+	}
+
+	id := r.customLinkTokenData[customLinkToken].Id
+
+	newCustomLink := model.CustomLink{
+		Id:           id,
+		UserId:       r.customLinkData[id].UserId,
+		Url:          repository.DeleteStringValue,
+		Token:        "",
+		IsSuggestion: r.customLinkData[id].IsSuggestion,
+		SuggestionId: r.customLinkData[id].SuggestionId,
+		Deleted:      true,
+		CreatedAt:    r.customLinkData[id].CreatedAt,
+		UpdatedAt:    time.Now(),
+	}
+
+	r.customLinkData[id] = newCustomLink
+
+	delete(r.customLinkTokenData, customLinkToken)
+
+	return &newCustomLink, nil
+}

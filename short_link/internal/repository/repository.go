@@ -17,6 +17,7 @@ type Storer interface {
 	ListActiveCustomLink(ctx context.Context) ([]model.CustomLink, error)
 	ListCustomLinkByUser(ctx context.Context, userId uuid.UUID) ([]model.CustomLink, error)
 	DeleteCustomLink(ctx context.Context, customLinkID model.CustomLinkId) (*model.CustomLink, error)
+	DeleteCustomLinkByToken(ctx context.Context, customLinkToken model.CustomLinkToken) (*model.CustomLink, error)
 	// Recycle Link
 	PutRecycleLink(ctx context.Context, recycleLink model.RecycleLink) error
 	GetRecycleLink(ctx context.Context) (*model.RecycleLink, error)

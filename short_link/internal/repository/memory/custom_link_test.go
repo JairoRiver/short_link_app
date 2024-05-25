@@ -147,3 +147,29 @@ func TestDeleteCustomLink(t *testing.T) {
 	assert.True(t, errors.Is(err, repository.ErrNotFound))
 	assert.Nil(t, deletedLinkToken)
 }
+
+func TestDeleteCustomLinkByToken(t *testing.T) {
+	repo := New()
+
+	errorToken := util.RandomString(6)
+	// Test Not Found error
+	errorLink, err := repo.DeleteCustomLinkByToken(context.Background(), model.CustomLinkToken(errorToken))
+	assert.Nil(t, errorLink)
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
+
+	customLink := createRandomCustomLink(t, repo)
+	// Test logical delete
+	deletedLink, err := repo.DeleteCustomLinkByToken(context.Background(), customLink.Token)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, deletedLink)
+	assert.Equal(t, deletedLink.Url, repository.DeleteStringValue)
+	assert.Zero(t, deletedLink.Token)
+	assert.True(t, deletedLink.Deleted)
+	assert.Greater(t, deletedLink.UpdatedAt, deletedLink.CreatedAt)
+
+	deletedLinkToken, err := repo.GetCustomLinkByToken(context.Background(), customLink.Token)
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
+	assert.Nil(t, deletedLinkToken)
+}

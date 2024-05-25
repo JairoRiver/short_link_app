@@ -41,7 +41,7 @@ func TestGetByCustomToken(t *testing.T) {
 	control := New(repo)
 
 	//Token invalid len
-	token := util.RandomString(6)
+	token := util.RandomString(util.MaxLenToken)
 	customLinkPrms := repository.CreateCustomLinkParams{
 		Token: model.CustomLinkToken(token),
 	}

@@ -28,7 +28,7 @@ type GetLinkResponse struct {
 }
 
 func (c *Controller) GetByCustomToken(ctx context.Context, token string) (*GetLinkResponse, error) {
-	if len(token) > 6 {
+	if len(token) > util.MaxLenToken {
 		customLink, err := c.repo.GetCustomLinkByToken(ctx, model.CustomLinkToken(token))
 		if err != nil {
 			return nil, fmt.Errorf("Controller GetByCustomToken GetCustomLinkByToken error: %w", err)
@@ -42,13 +42,9 @@ func (c *Controller) GetByCustomToken(ctx context.Context, token string) (*GetLi
 }
 
 func (c *Controller) GetByToken(ctx context.Context, token string) (*GetLinkResponse, error) {
-	if len(token) != 6 {
-		return nil, fmt.Errorf("Controller GetByToken token len must be 6, error: %w", util.ErrInvalidToken)
-	}
-
-	s_k, err := util.FromBase62(token)
+	s_k, err := decodingToken(token)
 	if err != nil {
-		return nil, fmt.Errorf("Controller GetByToken util.FromBase62 error: %w", err)
+		return nil, fmt.Errorf("Controller GetByToken decodingToken error: %w", err)
 	}
 
 	shortLink, err := c.repo.GetShortLinkBySKey(ctx, model.ShortLinkId(s_k))
