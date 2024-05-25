@@ -17,3 +17,4 @@ func New(repo repository.Storer) *Controller {
 }
 
 var ErrInvalidCustomToken = errors.New("error invalid custom token")
+var ErrInvalidToken = errors.New("error invalid token")

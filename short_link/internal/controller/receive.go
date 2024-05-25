@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/JairoRiver/short_link_app/short_link/internal/repository"
+	"github.com/JairoRiver/short_link_app/short_link/internal/util"
 	"github.com/JairoRiver/short_link_app/short_link/pkg/model"
 )
 
@@ -37,5 +38,27 @@ func (c *Controller) GetByCustomToken(ctx context.Context, token string) (*GetLi
 		}
 		return &rps, nil
 	}
-	return nil, fmt.Errorf("Controller GetByCustomToken token len <= 6 error: %w", ErrInvalidCustomToken)
+	return nil, fmt.Errorf("Controller GetByCustomToken token len must be > 6, error: %w", ErrInvalidCustomToken)
+}
+
+func (c *Controller) GetByToken(ctx context.Context, token string) (*GetLinkResponse, error) {
+	if len(token) != 6 {
+		return nil, fmt.Errorf("Controller GetByToken token len must be 6, error: %w", util.ErrInvalidToken)
+	}
+
+	s_k, err := util.FromBase62(token)
+	if err != nil {
+		return nil, fmt.Errorf("Controller GetByToken util.FromBase62 error: %w", err)
+	}
+
+	shortLink, err := c.repo.GetShortLinkBySKey(ctx, model.ShortLinkId(s_k))
+	if err != nil {
+		return nil, fmt.Errorf("Controller GetByToken GetShortLinkBySKey error: %w", err)
+	}
+
+	rps := GetLinkResponse{
+		url: shortLink.Url,
+	}
+
+	return &rps, nil
 }

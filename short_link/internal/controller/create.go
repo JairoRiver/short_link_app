@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"math/big"
 	"time"
 
 	"github.com/JairoRiver/short_link_app/short_link/internal/repository"
+	"github.com/JairoRiver/short_link_app/short_link/internal/util"
 	"github.com/JairoRiver/short_link_app/short_link/pkg/model"
 )
 
@@ -18,7 +18,7 @@ type ShortLinkResponse struct {
 }
 
 func (c *Controller) CreateShortLink(ctx context.Context, url string, userId repository.HasUserID) (*ShortLinkResponse, error) {
-	var s_key int64
+	var s_key uint64
 	// first step find if exist a recycle key
 	recicleLink, err := c.repo.GetRecycleLink(ctx)
 	if err != nil {
@@ -29,7 +29,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 				return nil, fmt.Errorf("Controller CreateShortLink GetAuxSKey error: %w", err)
 			}
 
-			s_key = int64(aux_s_key.A0) + (int64(aux_s_key.N0) * int64(aux_s_key.Step))
+			s_key = uint64(aux_s_key.A0) + (uint64(aux_s_key.N0) * uint64(aux_s_key.Step))
 
 			updateSKParams := repository.AuxSKeyParams{}
 			if aux_s_key.N0 < aux_s_key.N {
@@ -51,7 +51,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 
 	} else {
 		// If we have a recycle link we will use this link
-		s_key = int64(recicleLink.SKey)
+		s_key = uint64(recicleLink.SKey)
 		err = c.repo.DeleteRecycleLink(ctx, recicleLink.SKey)
 		if err != nil {
 			return nil, fmt.Errorf("Controller CreateShortLink DeleteRecycleLink error: %w", err)
@@ -59,7 +59,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 	}
 
 	// Second step genate the token, s_key to base62 encoding
-	token := big.NewInt(s_key).Text(62)
+	token := util.ToBase62(s_key)
 
 	//Create short link
 	shortLinkParams := repository.CreateShortLinkParams{

@@ -3,7 +3,6 @@ package controller
 import (
 	"context"
 	"errors"
-	"math/big"
 	"testing"
 
 	"github.com/JairoRiver/short_link_app/short_link/internal/repository"
@@ -43,7 +42,7 @@ func TestCreateShortLink(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, otherShortLink)
 	assert.Equal(t, otherShortLink.url, url)
-	assert.Equal(t, otherShortLink.token, big.NewInt(testSK).Text(62))
+	assert.Equal(t, otherShortLink.token, util.ToBase62(uint64(testSK)))
 }
 
 func TestCreateCustomLink(t *testing.T) {
