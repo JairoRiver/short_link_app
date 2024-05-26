@@ -30,6 +30,7 @@ type Storer interface {
 	ListActiveShortLink(ctx context.Context) ([]model.ShortLink, error)
 	ListShortLinkByUser(ctx context.Context, userId uuid.UUID) ([]model.ShortLink, error)
 	DeleteShortLink(ctx context.Context, shotLinkID model.ShortLinkId) (*model.ShortLink, error)
+	DeleteShortLinkBySK(ctx context.Context, sKeyID model.ShortLinkId) (*model.ShortLink, error)
 	// Aux S Key Data
 	GetAuxSKey(ctx context.Context) (*model.AuxSKey, error)
 	UpdateAuxSKey(ctx context.Context, params AuxSKeyParams) (*model.AuxSKey, error)

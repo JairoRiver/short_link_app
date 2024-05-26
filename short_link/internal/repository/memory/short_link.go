@@ -120,3 +120,29 @@ func (r *Repository) DeleteShortLink(ctx context.Context, shotLinkID model.Short
 
 	return &newShortLink, nil
 }
+
+// GetShortLinkBySKey retrieves a shot link by S_key.
+func (r *Repository) DeleteShortLinkBySK(ctx context.Context, sKeyID model.ShortLinkId) (*model.ShortLink, error) {
+	if _, ok := r.shortLinkData[sKeyID]; !ok {
+		return nil, fmt.Errorf("Repository memory DeleteShortLinkBySK method error: %w", repository.ErrNotFound)
+	}
+
+	id := r.shortLinkData[sKeyID].Id
+
+	newShortLink := model.ShortLink{
+		Id:        id,
+		UserId:    r.shortLinkData[id].UserId,
+		Url:       repository.DeleteStringValue,
+		Token:     "",
+		SKey:      0,
+		Deleted:   true,
+		CreatedAt: r.shortLinkData[id].CreatedAt,
+		UpdatedAt: time.Now(),
+	}
+
+	r.shortLinkData[id] = newShortLink
+
+	delete(r.shortLinkData, sKeyID)
+
+	return &newShortLink, nil
+}

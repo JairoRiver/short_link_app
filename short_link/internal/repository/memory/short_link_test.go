@@ -152,3 +152,29 @@ func TestDeleteShortLink(t *testing.T) {
 	assert.True(t, errors.Is(err, repository.ErrNotFound))
 	assert.Nil(t, deletedLinkSk)
 }
+
+func TestDeleteShortLinkBySK(t *testing.T) {
+	repo := New()
+
+	// Test Not Found error
+	errorLink, err := repo.DeleteShortLinkBySK(context.Background(), model.ShortLinkId(util.RandomInt(sKeyLenMax+1, sKeyLenMax+50)))
+	assert.Nil(t, errorLink)
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
+
+	// Test logical delete
+	shortLink := createRandomShortLink(t, repo)
+	deletedLink, err := repo.DeleteShortLinkBySK(context.Background(), shortLink.SKey)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, deletedLink)
+	assert.Equal(t, deletedLink.Url, repository.DeleteStringValue)
+	assert.Zero(t, deletedLink.Token)
+	assert.Zero(t, deletedLink.SKey)
+	assert.True(t, deletedLink.Deleted)
+	assert.Greater(t, deletedLink.UpdatedAt, deletedLink.CreatedAt)
+
+	deletedLinkSk, err := repo.GetShortLinkBySKey(context.Background(), shortLink.SKey)
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, repository.ErrNotFound))
+	assert.Nil(t, deletedLinkSk)
+}
