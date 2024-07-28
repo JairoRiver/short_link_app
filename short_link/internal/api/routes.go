@@ -7,8 +7,14 @@ import (
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
+	// Load HTML templates
+	router.LoadHTMLGlob("./templates/*")
+
 	//Create Routes
 	router.POST("/v1/create", server.handler.CreateLink)
+
+	//Get Routes
+	router.GET("/:token", server.handler.GetLink)
 
 	server.router = router
 }

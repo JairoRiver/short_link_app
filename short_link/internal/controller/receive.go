@@ -24,7 +24,7 @@ func (c *Controller) CheckCustomLinkIsFree(ctx context.Context, token string) (b
 }
 
 type GetLinkResponse struct {
-	url string
+	Url string
 }
 
 func (c *Controller) GetByCustomToken(ctx context.Context, token string) (*GetLinkResponse, error) {
@@ -34,7 +34,7 @@ func (c *Controller) GetByCustomToken(ctx context.Context, token string) (*GetLi
 			return nil, fmt.Errorf("Controller GetByCustomToken GetCustomLinkByToken error: %w", err)
 		}
 		rps := GetLinkResponse{
-			url: customLink.Url,
+			Url: customLink.Url,
 		}
 		return &rps, nil
 	}
@@ -53,7 +53,7 @@ func (c *Controller) GetByToken(ctx context.Context, token string) (*GetLinkResp
 	}
 
 	rps := GetLinkResponse{
-		url: shortLink.Url,
+		Url: shortLink.Url,
 	}
 
 	return &rps, nil

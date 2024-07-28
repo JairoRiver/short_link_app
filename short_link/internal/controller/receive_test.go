@@ -68,7 +68,7 @@ func TestGetByCustomToken(t *testing.T) {
 	customLink, err = control.GetByCustomToken(context.Background(), token_2)
 	assert.NoError(t, err)
 	assert.NotNil(t, customLink)
-	assert.Equal(t, customLink.url, url)
+	assert.Equal(t, customLink.Url, url)
 }
 
 func TestGetByToken(t *testing.T) {
@@ -114,5 +114,5 @@ func TestGetByToken(t *testing.T) {
 	shortLink_4, err := control.GetByToken(context.Background(), token_4)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, shortLink_4)
-	assert.Equal(t, shortLink_4.url, url)
+	assert.Equal(t, shortLink_4.Url, url)
 }
