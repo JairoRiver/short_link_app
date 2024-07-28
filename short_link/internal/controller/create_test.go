@@ -27,7 +27,7 @@ func TestCreateShortLink(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, newShortLink)
-	assert.Equal(t, newShortLink.url, url)
+	assert.Equal(t, newShortLink.Url, url)
 
 	// Test with recicle link
 	testRLink := model.RecycleLink{
@@ -41,8 +41,8 @@ func TestCreateShortLink(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, otherShortLink)
-	assert.Equal(t, otherShortLink.url, url)
-	assert.Equal(t, otherShortLink.token, util.ToBase62(uint64(testSK)))
+	assert.Equal(t, otherShortLink.Url, url)
+	assert.Equal(t, otherShortLink.Token, util.ToBase62(uint64(testSK)))
 }
 
 func TestCreateCustomLink(t *testing.T) {
@@ -67,6 +67,6 @@ func TestCreateCustomLink(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, customToken_2)
-	assert.Equal(t, customToken_2.token, token)
-	assert.Equal(t, customToken_2.url, url_2)
+	assert.Equal(t, customToken_2.Token, token)
+	assert.Equal(t, customToken_2.Url, url_2)
 }

@@ -71,9 +71,9 @@ func TestDeleteLink(t *testing.T) {
 	newShortLink, err := control.CreateShortLink(context.Background(), url, user)
 	assert.NoError(t, err)
 	assert.NotNil(t, newShortLink)
-	assert.Equal(t, newShortLink.url, url)
+	assert.Equal(t, newShortLink.Url, url)
 
-	shortLink, err = control.DeleteLink(context.Background(), newShortLink.token)
+	shortLink, err = control.DeleteLink(context.Background(), newShortLink.Token)
 	assert.NoError(t, err)
 	assert.NotNil(t, shortLink)
 	assert.Equal(t, shortLink.url, repository.DeleteStringValue)

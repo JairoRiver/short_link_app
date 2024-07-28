@@ -13,8 +13,8 @@ import (
 
 // CreateShortLink generate an automatic new short link
 type ShortLinkResponse struct {
-	url   string
-	token string
+	Url   string
+	Token string
 }
 
 func (c *Controller) CreateShortLink(ctx context.Context, url string, userId repository.HasUserID) (*ShortLinkResponse, error) {
@@ -77,8 +77,8 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 	}
 
 	shortLinkRsp := ShortLinkResponse{
-		url:   shortLink.Url,
-		token: shortLink.Token,
+		Url:   shortLink.Url,
+		Token: shortLink.Token,
 	}
 	return &shortLinkRsp, nil
 }
@@ -103,8 +103,8 @@ func (c *Controller) CreateCustomLink(ctx context.Context, url string, userId re
 	}
 
 	customLinkRsp := ShortLinkResponse{
-		url:   customLink.Url,
-		token: string(customLink.Token),
+		Url:   customLink.Url,
+		Token: string(customLink.Token),
 	}
 	return &customLinkRsp, nil
 }
