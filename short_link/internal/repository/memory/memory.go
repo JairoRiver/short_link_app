@@ -1,6 +1,9 @@
 package memory
 
-import "github.com/JairoRiver/short_link_app/short_link/pkg/model"
+import (
+	"github.com/JairoRiver/short_link_app/short_link/internal/util"
+	"github.com/JairoRiver/short_link_app/short_link/pkg/model"
+)
 
 // ShortLinkRepository defines a Shot link repository.
 type Repository struct {
@@ -20,6 +23,6 @@ func New() *Repository {
 		customLinkData:      map[model.CustomLinkId]model.CustomLink{},
 		customLinkTokenData: map[model.CustomLinkToken]model.CustomLink{},
 		lastIds:             map[string]int{"shortLink": 0, "customLink": 0},
-		auxSKey:             model.AuxSKey{N: 60, Init: 931151403, End: 56800235583, Step: 931151403, A0: 0, N0: 1},
+		auxSKey:             model.AuxSKey{N: util.SknValue, Init: util.SkinitValue, End: util.SkendValue, Step: util.SkstepValue, A0: util.Ska0Value, N0: util.Skn0Value},
 	}
 }

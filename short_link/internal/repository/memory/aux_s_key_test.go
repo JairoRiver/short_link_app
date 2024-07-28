@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	nValue    = 60
-	initValue = 931151403
-	endValue  = 56800235583
-	stepValue = 931151403
-	a0Value   = 0
-	n0Value   = 1
+	nValue    = util.SknValue
+	initValue = util.SkinitValue
+	endValue  = util.SkendValue
+	stepValue = util.SkstepValue
+	a0Value   = util.Ska0Value
+	n0Value   = util.Skn0Value
 )
 
 func TestGetAuxSKey(t *testing.T) {

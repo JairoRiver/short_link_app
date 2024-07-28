@@ -76,7 +76,7 @@ func TestGetByToken(t *testing.T) {
 	control := New(repo)
 
 	//Token invalid len
-	token := util.RandomString(7)
+	token := util.RandomString(util.MaxLenToken + 3)
 	shortLink, err := control.GetByToken(context.Background(), token)
 	assert.Error(t, err)
 	assert.True(t, errors.Is(err, util.ErrInvalidToken))
@@ -90,7 +90,7 @@ func TestGetByToken(t *testing.T) {
 	assert.Nil(t, shortLink_2)
 
 	//Test error not found
-	token_3 := util.RandomString(6)
+	token_3 := util.RandomString(util.MaxLenToken)
 	shortLink_3, err := control.GetByToken(context.Background(), token_3)
 	assert.Error(t, err)
 	assert.True(t, errors.Is(err, repository.ErrNotFound))

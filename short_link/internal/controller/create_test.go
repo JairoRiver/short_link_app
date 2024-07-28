@@ -59,10 +59,20 @@ func TestCreateCustomLink(t *testing.T) {
 	assert.True(t, errors.Is(err, ErrInvalidCustomToken))
 	assert.Nil(t, customToken)
 
+	//test invalid token characters
+	url = util.RandomURL(11)
+	user = repository.HasUserID{}
+	token := util.RandomString(util.MaxLenToken+5) + " "
+	customToken, err = control.CreateCustomLink(context.Background(), url, user, errToken)
+
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, ErrInvalidCustomToken))
+	assert.Nil(t, customToken)
+
 	//test valid token len
 	url_2 := util.RandomURL(11)
 	user_2 := repository.HasUserID{}
-	token := util.RandomString(10)
+	token = util.RandomString(10)
 	customToken_2, err := control.CreateCustomLink(context.Background(), url_2, user_2, token)
 
 	assert.NoError(t, err)

@@ -21,8 +21,8 @@ func New(repo repository.Storer) *Controller {
 var ErrInvalidCustomToken = errors.New("error invalid custom token")
 
 func decodingToken(token string) (uint64, error) {
-	if len(token) != util.MaxLenToken {
-		return 0, fmt.Errorf("Controller GetByToken token len must be 6, error: %w", util.ErrInvalidToken)
+	if len(token) > util.MaxLenToken {
+		return 0, fmt.Errorf("Controller GetByToken token len must be lower than 7, error: %w", util.ErrInvalidToken)
 	}
 
 	s_k, err := util.FromBase62(token)

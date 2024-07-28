@@ -85,8 +85,12 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 
 func (c *Controller) CreateCustomLink(ctx context.Context, url string, userId repository.HasUserID, token string) (*ShortLinkResponse, error) {
 	// custom token len must be longer than 6
-	if len(token) <= 6 {
-		return nil, fmt.Errorf("Controller CreateCustomLink len token <= 6 error: %w", ErrInvalidCustomToken)
+	if len(token) <= util.MaxLenToken {
+		return nil, fmt.Errorf("Controller CreateCustomLink len token <= %d error: %w", util.MaxLenToken, ErrInvalidCustomToken)
+	}
+
+	if !util.IsValidURLPath(token) {
+		return nil, fmt.Errorf("Controller CreateCustomLink check tokens characteres dont accept special characters error: %w", ErrInvalidCustomToken)
 	}
 
 	customLinkParams := repository.CreateCustomLinkParams{
