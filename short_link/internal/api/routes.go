@@ -7,7 +7,7 @@ import (
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
-	// Load HTML templates
+	//Load HTML templates
 	router.LoadHTMLGlob("./templates/*")
 
 	//Create Routes
@@ -15,6 +15,9 @@ func (server *Server) setupRouter() {
 
 	//Get Routes
 	router.GET("/:token", server.handler.GetLink)
+
+	//Availability token check route
+	router.POST("/check/:token", server.handler.AvailabilityLink)
 
 	server.router = router
 }
