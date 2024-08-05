@@ -1,10 +1,9 @@
 package model
 
 type AuxSKey struct {
-	N    uint8
-	Init uint
+	N    uint
 	End  uint
 	Step uint
 	A0   uint
-	N0   uint8
+	N0   uint
 }

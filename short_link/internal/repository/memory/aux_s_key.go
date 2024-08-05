@@ -20,7 +20,7 @@ func (r *Repository) UpdateAuxSKey(ctx context.Context, params repository.AuxSKe
 
 	// Validate if need update N0
 	if params.N0.Valid {
-		r.auxSKey.N0 = uint8(params.N0.Value)
+		r.auxSKey.N0 = uint(params.N0.Value)
 	}
 
 	// Validate if nedd update A0

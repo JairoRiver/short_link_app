@@ -27,12 +27,11 @@ func TestGetAuxSKey(t *testing.T) {
 	assert.NotEmpty(t, auxSKey)
 
 	// Test the init value
-	assert.Equal(t, auxSKey.N, uint8(nValue))
-	assert.Equal(t, auxSKey.Init, uint(initValue))
+	assert.Equal(t, auxSKey.N, uint(nValue))
 	assert.Equal(t, auxSKey.End, uint(endValue))
 	assert.Equal(t, auxSKey.Step, uint(stepValue))
 	assert.Equal(t, auxSKey.A0, uint(a0Value))
-	assert.Equal(t, auxSKey.N0, uint8(n0Value))
+	assert.Equal(t, auxSKey.N0, uint(n0Value))
 }
 
 func TestUpdateAuxSKey(t *testing.T) {
@@ -46,7 +45,7 @@ func TestUpdateAuxSKey(t *testing.T) {
 	newN0SKey, err := repo.UpdateAuxSKey(context.Background(), N0UpdateParams)
 
 	assert.NoError(t, err)
-	assert.Equal(t, newN0SKey.N0, uint8(newN0))
+	assert.Equal(t, newN0SKey.N0, uint(newN0))
 
 	// Test to update A0
 	newA0 := util.RandomInt(1, stepValue)

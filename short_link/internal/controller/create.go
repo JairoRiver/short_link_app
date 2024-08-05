@@ -36,7 +36,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 				updateSKParams.N0 = repository.IsIntValid{Valid: true, Value: uint(aux_s_key.N0) + 1}
 			}
 			if aux_s_key.N0 == aux_s_key.N {
-				updateSKParams.N0 = repository.IsIntValid{Valid: true, Value: 0}
+				updateSKParams.N0 = repository.IsIntValid{Valid: true, Value: 1}
 				updateSKParams.A0 = repository.IsIntValid{Valid: true, Value: aux_s_key.A0 + 1}
 			}
 

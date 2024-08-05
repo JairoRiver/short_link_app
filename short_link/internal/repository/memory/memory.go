@@ -23,6 +23,6 @@ func New() *Repository {
 		customLinkData:      map[model.CustomLinkId]model.CustomLink{},
 		customLinkTokenData: map[model.CustomLinkToken]model.CustomLink{},
 		lastIds:             map[string]int{"shortLink": 0, "customLink": 0},
-		auxSKey:             model.AuxSKey{N: util.SknValue, Init: util.SkinitValue, End: util.SkendValue, Step: util.SkstepValue, A0: util.Ska0Value, N0: util.Skn0Value},
+		auxSKey:             model.AuxSKey{N: util.SknValue, End: util.SkendValue, Step: util.SkstepValue, A0: util.Ska0Value, N0: util.Skn0Value},
 	}
 }
