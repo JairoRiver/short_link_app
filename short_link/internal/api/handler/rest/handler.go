@@ -10,12 +10,13 @@ import (
 
 // Handler defines a HTTP short Link handler.
 type Handler struct {
-	ctrl *controller.Controller
+	ctrl   *controller.Controller
+	config util.Config
 }
 
 // New creates a new service HTTP handler.
-func New(ctrl *controller.Controller) *Handler {
-	return &Handler{ctrl}
+func New(ctrl *controller.Controller, config util.Config) *Handler {
+	return &Handler{ctrl, config}
 }
 
 // CreateLinkType - Custom type to hold value for new short link type from 1-3

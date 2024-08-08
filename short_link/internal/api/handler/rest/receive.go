@@ -14,6 +14,14 @@ type getLinkRequest struct {
 	Token string `uri:"token" binding:"required"`
 }
 
+// @Summary GetLink get a token an retuen a redirect
+// @Description get a short link or custom link and return a redirect
+// @ID get-link
+// @Accept  json
+// @Produce  json
+// @Param   token     path    string     true        "token"
+// @Success 307
+// @Router /{token} [get]
 func (h *Handler) GetLink(ctx *gin.Context) {
 	var req getLinkRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {

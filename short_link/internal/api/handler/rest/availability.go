@@ -14,6 +14,14 @@ type availabilityLinkRequest struct {
 	Token string `uri:"token" binding:"required"`
 }
 
+// @Summary Check if a custom link are available
+// @Description AvailabilityLink check if one custom token no are in use yet
+// @ID post-check-link
+// @Accept  json
+// @Produce  json
+// @Param   token     path    string     true        "token"
+// @Success 200 string token availability
+// @Router /check/{token} [post]
 func (h *Handler) AvailabilityLink(ctx *gin.Context) {
 	var req availabilityLinkRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {

@@ -205,3 +205,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+# enviroment
+app.env

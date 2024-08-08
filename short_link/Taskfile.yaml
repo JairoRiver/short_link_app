@@ -9,3 +9,7 @@ tasks:
     desc: init the server
     cmds:
       - go run cmd/api/main.go
+  api_doc:
+    desc: generate swagger documentation
+    cmds:
+      - swag init -g cmd/api/main.go

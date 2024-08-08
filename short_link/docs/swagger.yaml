@@ -1,0 +1,95 @@
+definitions:
+  rest.CreateLinkRequest:
+    properties:
+      token:
+        type: string
+      type:
+        $ref: '#/definitions/rest.CreateLinkType'
+      url:
+        type: string
+      user_id:
+        type: string
+    required:
+    - type
+    - url
+    type: object
+  rest.CreateLinkResponse:
+    properties:
+      short_url:
+        type: string
+      token:
+        type: string
+      url:
+        type: string
+    type: object
+  rest.CreateLinkType:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Short
+    - Custom
+info:
+  contact: {}
+paths:
+  /{token}:
+    get:
+      consumes:
+      - application/json
+      description: get a short link or custom link and return a redirect
+      operationId: get-link
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "307":
+          description: Temporary Redirect
+      summary: GetLink get a token an retuen a redirect
+  /check/{token}:
+    post:
+      consumes:
+      - application/json
+      description: AvailabilityLink check if one custom token no are in use yet
+      operationId: post-check-link
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Check if a custom link are available
+  /v1/create:
+    post:
+      consumes:
+      - application/json
+      description: generate a short link or custom link from a request
+      operationId: post-create-link
+      parameters:
+      - description: Create Link Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CreateLinkRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.CreateLinkResponse'
+      summary: Create a new short Link
+swagger: "2.0"
