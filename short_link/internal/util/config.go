@@ -7,6 +7,7 @@ import "github.com/spf13/viper"
 type Config struct {
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
 	DomainName    string `mapstructure:"DOMAIN_NAME"`
+	Environment   string `mapstructure:"ENVIRONMENT"`
 }
 
 // LoadConfig reads configuration from file or environment variables.
