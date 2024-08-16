@@ -1,14 +1,44 @@
 version: '3'
 
+env:
+  DB_URL: 'postgresql://root:secret@localhost:5432/short_link?sslmode=disable'
+
 tasks:
+  postgres:
+    desc: Build a postgres container
+    cmds:
+      - docker run --name short_link -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:16-alpine
+
+  createdb:
+    desc: Create db short_link
+    cmds:
+      - docker exec -it short_link createdb --username=root --owner=root short_link
+
+  dropdb:
+    desc: Drop short_link db
+    cmds:
+      - docker exec -it short_link dropdb short_link
+
+  migrateup:
+    desc: Run the migrations up
+    cmds:
+      - migrate -path internal/repository/db/migration -database $DB_URL -verbose up
+
+  migratedown:
+    desc: Run the migrations down
+    cmds:
+      - migrate -path internal/repository/db/migration -database $DB_URL -verbose down
+
   test:
     desc: run the test
     cmds:
     - go test -v -cover ./...
+
   server:
     desc: init the server
     cmds:
       - go run cmd/api/main.go
+
   api_doc:
     desc: generate swagger documentation
     cmds:

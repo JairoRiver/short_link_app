@@ -23,7 +23,7 @@ const (
 	listTestLen     = 20
 )
 
-// createRandomShortLink create short link for test propouses
+// createRandomShortLink create short link for test proposes
 func createRandomShortLink(t *testing.T, repo *Repository) model.ShortLink {
 	shortLink := repository.CreateShortLinkParams{
 		UserId:    repository.HasUserID{ID: uuid.New(), Valid: true},
@@ -104,7 +104,7 @@ func TestListActiveShortLink(t *testing.T) {
 	shortLinkList, err := repo.ListActiveShortLink(context.Background())
 	assert.NoError(t, err)
 
-	// All elements must active, Deleted == false
+	// All elements must be active, Deleted == false
 	for _, link := range shortLinkList {
 		assert.False(t, link.Deleted)
 	}

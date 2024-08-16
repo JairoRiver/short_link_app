@@ -82,7 +82,7 @@ func (r *Repository) ListActiveShortLink(ctx context.Context) ([]model.ShortLink
 	return shortLinks, nil
 }
 
-// ListShortLinkByUser retreives all Short Links by User.
+// ListShortLinkByUser retrieves all Short Links by User.
 func (r *Repository) ListShortLinkByUser(ctx context.Context, userId uuid.UUID) ([]model.ShortLink, error) {
 	shortLinks := make([]model.ShortLink, 0, len(r.shortLinkData))
 
@@ -121,7 +121,7 @@ func (r *Repository) DeleteShortLink(ctx context.Context, shotLinkID model.Short
 	return &newShortLink, nil
 }
 
-// GetShortLinkBySKey retrieves a shot link by S_key.
+// DeleteShortLinkBySKey retrieves a shot link by S_key.
 func (r *Repository) DeleteShortLinkBySK(ctx context.Context, sKeyID model.ShortLinkId) (*model.ShortLink, error) {
 	if _, ok := r.shortLinkData[sKeyID]; !ok {
 		return nil, fmt.Errorf("Repository memory DeleteShortLinkBySK method error: %w", repository.ErrNotFound)

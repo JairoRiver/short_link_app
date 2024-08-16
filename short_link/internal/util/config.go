@@ -8,6 +8,7 @@ type Config struct {
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
 	DomainName    string `mapstructure:"DOMAIN_NAME"`
 	Environment   string `mapstructure:"ENVIRONMENT"`
+	DBSource      string `mapstructure:"DB_SOURCE"`
 }
 
 // LoadConfig reads configuration from file or environment variables.
