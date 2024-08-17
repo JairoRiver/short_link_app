@@ -39,11 +39,11 @@ CREATE TABLE recycle_link (
 );
 
 CREATE TABLE aux_s_key (
-                           N int,
-                           "End" int,
-                           Step int,
-                           A0 int,
-                           N0 int
+                           N bigint,
+                           "End" bigint,
+                           Step bigint,
+                           A0 bigint,
+                           N0 bigint
 );
 
 CREATE INDEX ON users (id);

@@ -11,7 +11,6 @@ import (
 
 const (
 	nValue    = util.SknValue
-	initValue = util.SkinitValue
 	endValue  = util.SkendValue
 	stepValue = util.SkstepValue
 	a0Value   = util.Ska0Value
