@@ -69,7 +69,7 @@ func (r *Repository) ListAllShortLink(ctx context.Context) ([]model.ShortLink, e
 	return shortLinks, nil
 }
 
-// ListActiveShortLink retreives all Short Likns not deleted.
+// ListActiveShortLink retrieves all Short Links not deleted.
 func (r *Repository) ListActiveShortLink(ctx context.Context) ([]model.ShortLink, error) {
 	shortLinks := make([]model.ShortLink, 0, len(r.shortLinkData))
 

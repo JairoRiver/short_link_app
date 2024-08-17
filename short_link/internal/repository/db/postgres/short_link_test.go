@@ -121,11 +121,8 @@ func TestListShortLinkByUser(t *testing.T) {
 
 func TestDeleteShortLink(t *testing.T) {
 	shortLink := createRandomShortLink(t)
-	args := DeleteShortLinkParams{
-		ID: int64(shortLink.Id),
-	}
 	// Test delete link
-	deletedLink, err := testStore.DeleteShortLink(context.Background(), args)
+	deletedLink, err := testStore.DeleteShortLink(context.Background(), shortLink.Id)
 	assert.NotNil(t, deletedLink)
 	assert.NoError(t, err)
 	assert.NoError(t, err)
@@ -142,10 +139,7 @@ func TestDeleteShortLink(t *testing.T) {
 	assert.Empty(t, deletedLinkSk)
 
 	// Test Not Found error
-	argsErr := DeleteShortLinkParams{
-		ID: util.RandomInt(maxRandomSk, maxRandomSk*2),
-	}
-	errorLink, err := testStore.DeleteShortLink(context.Background(), argsErr)
+	errorLink, err := testStore.DeleteShortLink(context.Background(), model.ShortLinkId(util.RandomInt(maxRandomSk, maxRandomSk*2)))
 	assert.Empty(t, errorLink)
 	assert.Error(t, err)
 	assert.True(t, errors.Is(err, repository.ErrNotFound))
@@ -153,11 +147,8 @@ func TestDeleteShortLink(t *testing.T) {
 
 func TestDeleteShortLinkBySK(t *testing.T) {
 	shortLink := createRandomShortLink(t)
-	args := DeleteShortLinkBySkParams{
-		SKey: int64(shortLink.SKey),
-	}
 	// Test delete link
-	deletedLink, err := testStore.DeleteShortLinkBySK(context.Background(), args)
+	deletedLink, err := testStore.DeleteShortLinkBySK(context.Background(), shortLink.SKey)
 	assert.NotNil(t, deletedLink)
 	assert.NoError(t, err)
 	assert.NoError(t, err)
@@ -174,10 +165,7 @@ func TestDeleteShortLinkBySK(t *testing.T) {
 	assert.Empty(t, deletedLinkSk)
 
 	// Test Not Found error
-	argsErr := DeleteShortLinkBySkParams{
-		SKey: util.RandomInt(maxRandomSk, maxRandomSk*2),
-	}
-	errorLink, err := testStore.DeleteShortLinkBySK(context.Background(), argsErr)
+	errorLink, err := testStore.DeleteShortLinkBySK(context.Background(), model.ShortLinkId(util.RandomInt(maxRandomSk, maxRandomSk*2)))
 	assert.Empty(t, errorLink)
 	assert.Error(t, err)
 	assert.True(t, errors.Is(err, repository.ErrNotFound))

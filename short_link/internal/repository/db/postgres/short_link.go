@@ -179,12 +179,8 @@ FROM short_link
 WHERE user_id = $1
 `
 
-type ListShortLinkByUserParams struct {
-	UserId uuid.UUID `json:"user_id"`
-}
-
-func (q *Queries) ListShortLinkByUser(ctx context.Context, arg ListShortLinkByUserParams) ([]model.ShortLink, error) {
-	rows, err := q.db.Query(ctx, listShortLinkByUserQuery, arg.UserId)
+func (q *Queries) ListShortLinkByUser(ctx context.Context, userId uuid.UUID) ([]model.ShortLink, error) {
+	rows, err := q.db.Query(ctx, listShortLinkByUserQuery, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -220,12 +216,8 @@ WHERE Id = $6
 RETURNING id, user_id, url, token, s_key, deleted, created_at, updated_at
 `
 
-type DeleteShortLinkParams struct {
-	ID int64 `json:"id"`
-}
-
-func (q *Queries) DeleteShortLink(ctx context.Context, args DeleteShortLinkParams) (*model.ShortLink, error) {
-	row := q.db.QueryRow(ctx, deleteShortLinkQuery, repository.DeleteStringValue, "", 0, true, time.Now(), args.ID)
+func (q *Queries) DeleteShortLink(ctx context.Context, shotLinkID model.ShortLinkId) (*model.ShortLink, error) {
+	row := q.db.QueryRow(ctx, deleteShortLinkQuery, repository.DeleteStringValue, "", 0, true, time.Now(), shotLinkID)
 	var i model.ShortLink
 	err := row.Scan(
 		&i.Id,
@@ -251,12 +243,8 @@ WHERE s_key = $6
 RETURNING id, user_id, url, token, s_key, deleted, created_at, updated_at
 `
 
-type DeleteShortLinkBySkParams struct {
-	SKey int64 `json:"id"`
-}
-
-func (q *Queries) DeleteShortLinkBySK(ctx context.Context, args DeleteShortLinkBySkParams) (*model.ShortLink, error) {
-	row := q.db.QueryRow(ctx, deleteShortLinkBySkQuery, repository.DeleteStringValue, "", 0, true, time.Now(), args.SKey)
+func (q *Queries) DeleteShortLinkBySK(ctx context.Context, sKeyID model.ShortLinkId) (*model.ShortLink, error) {
+	row := q.db.QueryRow(ctx, deleteShortLinkBySkQuery, repository.DeleteStringValue, "", 0, true, time.Now(), sKeyID)
 	var i model.ShortLink
 	err := row.Scan(
 		&i.Id,
