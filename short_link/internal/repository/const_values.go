@@ -1,3 +1,6 @@
 package repository
 
-const DeleteStringValue = "@del"
+const (
+	DeleteStringValue      = "@del"
+	DeleteCustomTokenValue = "@del_token"
+)

@@ -62,7 +62,7 @@ func (q *Queries) DeleteRecycleLink(ctx context.Context, recycleLinkID model.Rec
 		&i.SKey,
 	)
 	if err == pgx.ErrNoRows {
-		err = fmt.Errorf("Repository postgres GetRecycleLink method error: %w", repository.ErrNotFound)
+		err = fmt.Errorf("Repository postgres DeleteRecycleLink method error: %w", repository.ErrNotFound)
 	}
 
 	return err

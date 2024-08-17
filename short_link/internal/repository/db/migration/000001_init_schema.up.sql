@@ -25,7 +25,7 @@ CREATE TABLE custom_link (
                              id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                              user_id uuid REFERENCES users(id),
                              url text NOT NULL,
-                             token text NOT NULL,
+                             token text UNIQUE NOT NULL,
                              is_suggestion boolean DEFAULT false,
                              suggestion_id bigint,
                              deleted boolean DEFAULT false,

@@ -217,7 +217,7 @@ RETURNING id, user_id, url, token, s_key, deleted, created_at, updated_at
 `
 
 func (q *Queries) DeleteShortLink(ctx context.Context, shotLinkID model.ShortLinkId) (*model.ShortLink, error) {
-	row := q.db.QueryRow(ctx, deleteShortLinkQuery, repository.DeleteStringValue, "", 0, true, time.Now(), shotLinkID)
+	row := q.db.QueryRow(ctx, deleteShortLinkQuery, repository.DeleteStringValue, "", 0, true, time.Now().UTC(), shotLinkID)
 	var i model.ShortLink
 	err := row.Scan(
 		&i.Id,
@@ -244,7 +244,7 @@ RETURNING id, user_id, url, token, s_key, deleted, created_at, updated_at
 `
 
 func (q *Queries) DeleteShortLinkBySK(ctx context.Context, sKeyID model.ShortLinkId) (*model.ShortLink, error) {
-	row := q.db.QueryRow(ctx, deleteShortLinkBySkQuery, repository.DeleteStringValue, "", 0, true, time.Now(), sKeyID)
+	row := q.db.QueryRow(ctx, deleteShortLinkBySkQuery, repository.DeleteStringValue, "", 0, true, time.Now().UTC(), sKeyID)
 	var i model.ShortLink
 	err := row.Scan(
 		&i.Id,

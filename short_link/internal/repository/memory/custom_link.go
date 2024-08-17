@@ -72,7 +72,7 @@ func (r *Repository) ListAllCustomLink(ctx context.Context) ([]model.CustomLink,
 	return customLinks, nil
 }
 
-// ListActiveCustomLink retreives all Custom Likns not deleted.
+// ListActiveCustomLink retrieves all Custom Links not deleted.
 func (r *Repository) ListActiveCustomLink(ctx context.Context) ([]model.CustomLink, error) {
 	customLinks := make([]model.CustomLink, 0, len(r.customLinkData))
 
@@ -85,7 +85,7 @@ func (r *Repository) ListActiveCustomLink(ctx context.Context) ([]model.CustomLi
 	return customLinks, nil
 }
 
-// ListCustomLinkByUser retreives all Custom Links by User.
+// ListCustomLinkByUser retrieves all Custom Links by User.
 func (r *Repository) ListCustomLinkByUser(ctx context.Context, userId uuid.UUID) ([]model.CustomLink, error) {
 	customLinks := make([]model.CustomLink, 0, len(r.customLinkData))
 
@@ -125,7 +125,7 @@ func (r *Repository) DeleteCustomLink(ctx context.Context, customLinkID model.Cu
 	return &newCustomLink, nil
 }
 
-// DeleteCustomLinkByToken ogic delete for a custom link by token.
+// DeleteCustomLinkByToken logic delete for a custom link by token.
 func (r *Repository) DeleteCustomLinkByToken(ctx context.Context, customLinkToken model.CustomLinkToken) (*model.CustomLink, error) {
 	if _, ok := r.customLinkTokenData[customLinkToken]; !ok {
 		return nil, fmt.Errorf("Repository memory DeleteCustomLinkByToken method error: %w", repository.ErrNotFound)
