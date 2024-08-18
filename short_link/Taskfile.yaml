@@ -39,6 +39,11 @@ tasks:
     cmds:
       - go run cmd/api/main.go
 
+  server_prod:
+    desc: init the server with production mode
+    cmds:
+      - ENVIRONMENT=production GIN_MODE=release go run cmd/api/main.go
+
   api_doc:
     desc: generate swagger documentation
     cmds:
