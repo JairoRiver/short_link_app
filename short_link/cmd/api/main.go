@@ -28,6 +28,8 @@ func main() {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 		repo = memory.New()
 	} else {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
 		connPool, err := pgxpool.New(context.Background(), config.DBSource)
 		if err != nil {
 			log.Fatal().Err(err).Msg("cannot connect to db")
