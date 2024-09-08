@@ -13,7 +13,7 @@ import (
 
 // CreateLink handler POST /create requests.
 type CreateLinkRequest struct {
-	Url      string         `json:"url" binding:"required"`
+	Url      string         `json:"url" binding:"required,url"`
 	LinkType CreateLinkType `json:"type" binding:"required"`
 	UserId   uuid.UUID      `json:"user_id"`
 	Token    string         `json:"token"`
