@@ -12,34 +12,34 @@ type DeleteLinkResponse struct {
 	url string
 }
 
-func (c *Controller) DeleteCustomLink(ctx context.Context, token string) (*DeleteLinkResponse, error) {
+func (c *Control) DeleteCustomLink(ctx context.Context, token string) (*DeleteLinkResponse, error) {
 	if len(token) > util.MaxLenToken {
 		customLink, err := c.repo.DeleteCustomLinkByToken(ctx, model.CustomLinkToken(token))
 		if err != nil {
-			return nil, fmt.Errorf("Controller DeleteCustomLink DeleteCustomLinkByToken error: %w", err)
+			return nil, fmt.Errorf("Control DeleteCustomLink DeleteCustomLinkByToken error: %w", err)
 		}
 		rps := DeleteLinkResponse{
 			url: customLink.Url,
 		}
 		return &rps, nil
 	}
-	return nil, fmt.Errorf("Controller DeleteCustomLink token len must be > 6, error: %w", ErrInvalidCustomToken)
+	return nil, fmt.Errorf("Control DeleteCustomLink token len must be > 6, error: %w", ErrInvalidCustomToken)
 }
 
-func (c *Controller) DeleteLink(ctx context.Context, token string) (*DeleteLinkResponse, error) {
+func (c *Control) DeleteLink(ctx context.Context, token string) (*DeleteLinkResponse, error) {
 	s_k, err := decodingToken(token)
 	if err != nil {
-		return nil, fmt.Errorf("Controller DeleteLink decodingToken error: %w", err)
+		return nil, fmt.Errorf("Control DeleteLink decodingToken error: %w", err)
 	}
 	shortLink, err := c.repo.DeleteShortLinkBySK(ctx, model.ShortLinkId(s_k))
 	if err != nil {
-		return nil, fmt.Errorf("Controller DeleteLink DeleteShortLink error: %w", err)
+		return nil, fmt.Errorf("Control DeleteLink DeleteShortLink error: %w", err)
 	}
 
 	// Insert the sK on the table recycle link
 	err = c.repo.PutRecycleLink(ctx, model.RecycleLink{SKey: model.RecycleLinkId(s_k)})
 	if err != nil {
-		return nil, fmt.Errorf("Controller DeleteLink PutRecycleLink error: %w", err)
+		return nil, fmt.Errorf("Control DeleteLink PutRecycleLink error: %w", err)
 	}
 
 	rps := DeleteLinkResponse{

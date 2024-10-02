@@ -9,3 +9,8 @@ const (
 	Ska0Value   = 0
 	Skn0Value   = 1
 )
+
+const (
+	AvailableValue = "available_token"
+	InUse          = "busy_token"
+)

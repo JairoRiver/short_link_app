@@ -34,14 +34,14 @@ func (h *Handler) AvailabilityLink(ctx *gin.Context) {
 		_, err := h.ctrl.GetByCustomToken(ctx, req.Token)
 		if err != nil {
 			if errors.Is(err, repository.ErrNotFound) {
-				ctx.JSON(http.StatusOK, gin.H{"message": "token availability", "status": "available"})
+				ctx.JSON(http.StatusOK, gin.H{"message": "token availability", "status": util.AvailableValue})
 				return
 			}
 
 			ctx.JSON(http.StatusInternalServerError, errorResponse(fmt.Errorf("Handler AvailabilityLink GetByCustomToken error: %w", err)))
 			return
 		}
-		ctx.JSON(http.StatusOK, gin.H{"message": "token not availability", "status": "busy"})
+		ctx.JSON(http.StatusOK, gin.H{"message": "token not availability", "status": util.InUse})
 		return
 	}
 	ctx.JSON(http.StatusBadRequest, errorResponse(fmt.Errorf("Handler AvailabilityLink token len error: %w", customLinkTokenLengthError)))

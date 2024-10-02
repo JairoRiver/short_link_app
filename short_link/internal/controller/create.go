@@ -17,7 +17,7 @@ type ShortLinkResponse struct {
 	Token string
 }
 
-func (c *Controller) CreateShortLink(ctx context.Context, url string, userId repository.HasUserID) (*ShortLinkResponse, error) {
+func (c *Control) CreateShortLink(ctx context.Context, url string, userId repository.HasUserID) (*ShortLinkResponse, error) {
 	var s_key uint64
 	// first step find if exist a recycle key
 	recicleLink, err := c.repo.GetRecycleLink(ctx)
@@ -26,7 +26,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 			// Here we generated a new s_key
 			aux_s_key, err := c.repo.GetAuxSKey(ctx)
 			if err != nil {
-				return nil, fmt.Errorf("Controller CreateShortLink GetAuxSKey error: %w", err)
+				return nil, fmt.Errorf("Control CreateShortLink GetAuxSKey error: %w", err)
 			}
 
 			s_key = uint64(aux_s_key.A0) + (uint64(aux_s_key.N0) * uint64(aux_s_key.Step))
@@ -43,10 +43,10 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 			// Update sKeyParams
 			_, err = c.repo.UpdateAuxSKey(ctx, updateSKParams)
 			if err != nil {
-				return nil, fmt.Errorf("Controller CreateShortLink UpdateAuxSKey error: %w", err)
+				return nil, fmt.Errorf("Control CreateShortLink UpdateAuxSKey error: %w", err)
 			}
 		} else {
-			return nil, fmt.Errorf("Controller CreateShortLink GetRecycleLink error: %w", err)
+			return nil, fmt.Errorf("Control CreateShortLink GetRecycleLink error: %w", err)
 		}
 
 	} else {
@@ -54,7 +54,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 		s_key = uint64(recicleLink.SKey)
 		err = c.repo.DeleteRecycleLink(ctx, recicleLink.SKey)
 		if err != nil {
-			return nil, fmt.Errorf("Controller CreateShortLink DeleteRecycleLink error: %w", err)
+			return nil, fmt.Errorf("Control CreateShortLink DeleteRecycleLink error: %w", err)
 		}
 	}
 
@@ -73,7 +73,7 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 	}
 	shortLink, err := c.repo.PutShortLink(ctx, shortLinkParams)
 	if err != nil {
-		return nil, fmt.Errorf("Controller CreateShortLink PutShortLink error: %w", err)
+		return nil, fmt.Errorf("Control CreateShortLink PutShortLink error: %w", err)
 	}
 
 	shortLinkRsp := ShortLinkResponse{
@@ -83,14 +83,14 @@ func (c *Controller) CreateShortLink(ctx context.Context, url string, userId rep
 	return &shortLinkRsp, nil
 }
 
-func (c *Controller) CreateCustomLink(ctx context.Context, url string, userId repository.HasUserID, token string) (*ShortLinkResponse, error) {
+func (c *Control) CreateCustomLink(ctx context.Context, url string, userId repository.HasUserID, token string) (*ShortLinkResponse, error) {
 	// custom token len must be longer than 6
 	if len(token) <= util.MaxLenToken {
-		return nil, fmt.Errorf("Controller CreateCustomLink len token <= %d error: %w", util.MaxLenToken, ErrInvalidCustomToken)
+		return nil, fmt.Errorf("Control CreateCustomLink len token <= %d error: %w", util.MaxLenToken, ErrInvalidCustomToken)
 	}
 
 	if !util.IsValidURLPath(token) {
-		return nil, fmt.Errorf("Controller CreateCustomLink check tokens characteres dont accept special characters error: %w", ErrInvalidCustomToken)
+		return nil, fmt.Errorf("Control CreateCustomLink check tokens characteres dont accept special characters error: %w", ErrInvalidCustomToken)
 	}
 
 	customLinkParams := repository.CreateCustomLinkParams{
@@ -103,7 +103,7 @@ func (c *Controller) CreateCustomLink(ctx context.Context, url string, userId re
 	}
 	customLink, err := c.repo.PutCustomLink(ctx, customLinkParams)
 	if err != nil {
-		return nil, fmt.Errorf("Controller CreateCustomLink PutCustomLink error: %w", err)
+		return nil, fmt.Errorf("Control CreateCustomLink PutCustomLink error: %w", err)
 	}
 
 	customLinkRsp := ShortLinkResponse{
