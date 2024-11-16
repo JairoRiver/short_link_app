@@ -7,17 +7,17 @@ tasks:
   postgres:
     desc: Build a postgres container
     cmds:
-      - docker run --name short_link -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:16-alpine
+      - podman run --name short_link -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d docker.io/library/postgres:16-alpine
 
   createdb:
     desc: Create db short_link
     cmds:
-      - docker exec -it short_link createdb --username=root --owner=root short_link
+      - podman exec -it short_link createdb --username=root --owner=root short_link
 
   dropdb:
     desc: Drop short_link db
     cmds:
-      - docker exec -it short_link dropdb short_link
+      - podman exec -it short_link dropdb short_link
 
   migrateup:
     desc: Run the migrations up
@@ -32,7 +32,7 @@ tasks:
   test:
     desc: run the test
     cmds:
-    - go test -v -cover ./...
+      - go test -v -cover ./...
 
   server:
     desc: init the server
