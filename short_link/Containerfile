@@ -1,0 +1,14 @@
+FROM docker.io/library/golang:1.23.3-bookworm AS builder
+WORKDIR /app
+COPY . /app/
+RUN go mod download; \
+    CGO_ENABLED=0 ENVIRONMENT=production GIN_MODE=release go build -ldflags="-s -w" -o main -v ./cmd/api/main.go
+
+FROM gcr.io/distroless/static-debian11
+WORKDIR /app
+COPY --from=builder /app/main /app/main
+COPY templates /app/templates/
+COPY docs /app/docs/
+COPY app.env .
+EXPOSE 8080
+ENTRYPOINT ["/app/main"]

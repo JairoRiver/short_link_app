@@ -48,3 +48,8 @@ tasks:
     desc: generate swagger documentation
     cmds:
       - swag init -g cmd/api/main.go
+
+  image_build:
+    desc: generate a podman image
+    cmds:
+      - podman build -t jairo/test .
